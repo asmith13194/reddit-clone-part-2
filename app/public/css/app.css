@@ -1,0 +1,63 @@
+.media-object {
+  max-width: 200px;
+}
+
+[ng-click] {
+  cursor: pointer;
+}
+
+.search-form {
+  margin-top: 4px;
+}
+
+main.container {
+  margin-bottom: 4em;
+}
+
+.body-container {
+  height: 100vh;
+  background-color: #f5f5f5 !important;
+}
+
+.navbar {
+  background-color: #3b5998 !important;
+}
+
+.navbar-brand {
+  color: white !important;
+}
+
+.btn {
+  background-color: #3b5998 !important;
+}
+
+.well {
+  background-color: white !important;
+}
+
+body {
+  background-color: #f5f5f5 !important;
+}
+
+.comment-content {
+  margin-bottom: 0;
+}
+
+.comment-repeat {
+  margin-bottom: 10px;
+}
+
+.glyphicon-pencil {
+  right: auto;
+}
+
+.comment-message {
+  width: 80% !important;
+  overflow-wrap: break-word;
+}
+
+
+
+.comment-textarea {
+  width: 80%;
+}

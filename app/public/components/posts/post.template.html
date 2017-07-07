@@ -1,0 +1,177 @@
+<nav class="navbar navbar-default">
+  <div class="container">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">Reddit Clone</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    </div>
+  </div>
+</nav>
+
+<div class="body-container">
+  <main class="container">
+
+    <div class="pull-right">
+      <p><a class="btn btn-info" ng-click="$ctrl.newPostForm()">New Post</a></p>
+    </div>
+
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active">
+        <input type="search" ng-model="$ctrl.filter" class="form-control input-sm search-form" placeholder="Filter">
+      </li>
+      <li class="dropdown form-inline" ng-init="sort='vote_count'; sortName='Votes'">
+        <a class="dropdown-toggle" data-toggle="dropdown" role="button">Sort By {{$ctrl.checkSort()}}<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a ng-click="$ctrl.sort='-vote_count'">Votes</a></li>
+          <li><a ng-click="$ctrl.sort='title'">Title</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <div class="row">
+      <div class="col-md-8">
+        <form name="$ctrl.postform" novalidate ng-if="$ctrl.newPostToggle">
+          <div>
+            <label for="title">Title</label>
+            <input id="title" type="text" ng-model="post.title" class="form-control" required>
+          </div>
+          <div>
+            <label for="body">Body</label>
+            <textarea id="body" type="text" ng-model="post.body" class="form-control" required></textarea>
+          </div>
+          <div>
+            <label for="author">Author</label>
+            <input id="author" type="text" ng-model="post.author" class="form-control" required>
+          </div>
+          <div>
+            <label for="image-url">Image URL</label>
+            <input id="image-url" type="url" ng-model="post.image_url" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" ng-click="$ctrl.createPost(post)" ng-disabled="$ctrl.postform.$invalid" ng-class="{'has-error': $ctrl.postform.$invalid}">
+            Create Post
+          </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="row" ng-repeat="posty in $ctrl.master | filter: $ctrl.filter | orderBy: $ctrl.sort">
+      <div class="col-md-12">
+        <div class="well">
+          <div class="media-left">
+            <img class="media-object" src="{{posty.image_url}}">
+          </div>
+          <div class="media-body">
+            <h4 class="media-heading">
+            {{posty.title}}
+            |
+            <a ng-click="$ctrl.voteUp(posty)"><i class="glyphicon glyphicon-arrow-up"></i></a>
+            <a ng-click="$ctrl.voteDown(posty)"><i class="glyphicon glyphicon-arrow-down"></i></a>
+            {{posty.vote_count}}
+          </h4>
+            <div class="text-right">
+              {{posty.author}}
+            </div>
+            <p>
+              {{posty.body}}
+            </p>
+
+            <div>
+              {{posty.created_at | date:short}} |
+              <i class="glyphicon glyphicon-comment"></i>
+              <a ng-click="$ctrl.showComments(posty)">
+              {{posty.comments.length}} Comments
+            </a>|
+
+              <a ng-click="$ctrl.editPostForm(posty)">edit |</a>
+
+              <a ng-click="$ctrl.deletePost(posty)">delete</a>
+
+            </div>
+
+            <div class="row" ng-if="posty.showCommentsToggle">
+              <div class="col-md-12" >
+                <hr>
+                <div ng-repeat="commentz in posty.comments" class="comment-repeat">
+
+
+                  <form class="form-inline" ng-if="commentz.editMode">
+                    <div class="form-group comment-textarea">
+                      <textarea type="text" class="form-control comment-message" ng-model="commentz.content" ng-init="commentz.content"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-info" ng-click="$ctrl.updateComment(posty,commentz); commentz.editMode = false"><i class="glyphicon glyphicon-check"></i></button>
+                    </div>
+                    <div class="form-group">
+                      <a class="btn btn-info" ng-click="$ctrl.deleteComment(posty,commentz)" ng-if="commentz.editMode"><i class="glyphicon glyphicon-trash"></i></a>
+                    </div>
+                  </form>
+
+                  <form class="form-inline">
+                    <div class="form-group comment-message">
+                      <p id="commentz.comment" class="comment-content" ng-if="!commentz.editMode">{{commentz.content}}</p>
+                    </div>
+                    <div class="form-group">
+                      <a class="btn btn-info" ng-click="commentz.editMode = true" ng-if="!commentz.editMode"><i class="glyphicon glyphicon-pencil"></i></a>
+                    </div>
+                  </form>
+
+                </div>
+
+                <form novalidate name="$ctrl.commentform" class="form-inline" ng-if="posty.showCommentsToggle">
+                  <div class="form-group comment-textarea">
+                    <input type="text" class="form-control comment-message" ng-model="comment"></input>
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" class="btn btn-primary" ng-click="$ctrl.createComment($event,posty,comment); comment=''">
+                  </div>
+                </form>
+
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-8">
+                <form name="$ctrl.editPostform" ng-if="posty.editPostToggle">
+                  <div class="form-group">
+                    <label for="title">Title</label>
+                    <input id="title" type="text" ng-model="post.title" class="form-control" ng-init="post.title = posty.title">
+                  </div>
+                  <div class="form-group">
+                    <label for="body">Body</label>
+                    <textarea id="body" type="text" ng-model="post.body" class="form-control" ng-init="post.body = posty.body"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="author">Author</label>
+                    <input id="author" type="text" ng-model="post.author" class="form-control" ng-init="post.author = posty.author">
+                  </div>
+                  <div class="form-group">
+                    <label for="image-url">Image URL</label>
+                    <input id="image-url" type="url" ng-model="post.image_url" class="form-control" ng-init="post.image_url = posty.image_url">
+                  </div>
+                  <hr>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-primary" ng-click="$ctrl.editPost(post,posty)">
+                    Update
+                  </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

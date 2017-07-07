@@ -2,7 +2,7 @@
   "name": "angular-drill",
   "version": "1.0.0",
   "description": "",
-  "main":"/app/app.js",
+  "main":"app/app.js",
   "scripts": {
     "test-e2e": "NODE_ENV=test protractor test/e2e/conf.js",
     "test-server": "NODE_ENV=test mocha test/server",
@@ -40,5 +40,5 @@
     "knex": "^0.12.6",
     "moment": "^2.17.1",
     "pg": "^6.1.2"
-  },
+  }
 }

@@ -91,6 +91,9 @@
               <span class="time-stamps" ng-if="posty.now">
                 {{posty.time}} |
               </span>
+              <span class="time-stamps" ng-if="posty.oneminute">
+                {{posty.time}} minute ago |
+              </span>
               <span class="time-stamps" ng-if="posty.onehourless">
                 {{posty.time}} minutes ago |
               </span>
@@ -109,14 +112,11 @@
               <span class="time-stamps" ng-if="posty.oneyearplus">
                 {{posty.created_at | date: "MMM d, y 'at' h:mm a"}} |
               </span>
-              <i class="glyphicon glyphicon-comment"></i>
-              <a ng-click="$ctrl.showComments(posty)">
-              {{posty.comments.length}} Comments
-            </a>|
 
-              <a ng-click="$ctrl.editPostForm(posty)">edit |</a>
-
-              <a ng-click="$ctrl.deletePost(posty)">delete</a>
+              <a ng-click="$ctrl.showComments(posty)"><i class="glyphicon glyphicon-comment"></i>
+              {{posty.comments.length}} Comments</a> |
+              <a ng-click="$ctrl.editPostForm(posty)"><i class="glyphicon glyphicon-pencil"></i> edit</a> |
+              <a ng-click="$ctrl.deletePost(posty)"><i class="glyphicon glyphicon-trash"></i> delete</a>
 
             </div>
 
@@ -133,9 +133,6 @@
                     <div class="form-group">
                       <button class="btn btn-info" ng-click="$ctrl.updateComment(posty,commentz); commentz.editMode = false"><i class="glyphicon glyphicon-check"></i></button>
                     </div>
-                    <div class="form-group">
-                      <a class="btn btn-info" ng-click="$ctrl.deleteComment(posty,commentz)" ng-if="commentz.editMode"><i class="glyphicon glyphicon-trash"></i></a>
-                    </div>
                   </form>
 
                   <form class="form-inline">
@@ -143,7 +140,13 @@
                       <p id="commentz.comment" class="comment-content" ng-if="!commentz.editMode">{{commentz.content}}</p>
                     </div>
                     <div class="form-group">
-                      <a class="btn btn-info" ng-click="commentz.editMode = true" ng-if="!commentz.editMode"><i class="glyphicon glyphicon-pencil"></i></a>
+                      <a  ng-click="commentz.editMode = true" ng-if="!commentz.editMode"><i class="glyphicon glyphicon-pencil"></i> edit</a>
+                    </div>
+                    <div class="form-group">
+                      <span ng-if="!commentz.editMode">|</span>
+                    </div>
+                    <div class="form-group">
+                      <a ng-click="$ctrl.deleteComment(posty,commentz)" ng-if="!commentz.editMode"><i class="glyphicon glyphicon-trash"></i> delete</a>
                     </div>
                   </form>
 

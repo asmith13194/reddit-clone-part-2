@@ -8,8 +8,16 @@
   controller.$inject = ['$http'];
   function controller($http){
     const vm = this;
-    vm.master = [];
-    vm.sort = '-vote_count';
+
+    vm.$onInit = function(){
+      $http.get('/api/posts').then(function (response) {
+        vm.sort = '-vote_count';
+        vm.master = (response.data);
+        vm.master.forEach(ele=>{
+          whatTime(ele);
+        });
+      });
+    };
 
     vm.newPostForm = function(){
       if(vm.newPostToggle===true){
@@ -39,6 +47,8 @@
       post.editPostToggle = false;
       $http.post('/api/posts',post).then(response=>{
         response.data.comments=[];
+        response.data.time = 'Just now';
+        response.data.now = true;
         vm.master.push(response.data);
       });
     };
@@ -119,102 +129,102 @@
       }
     };
 
-    vm.$onInit = function(){
-      $http.get('/api/posts').then(function (response) {
-        vm.master = (response.data);
-        vm.master.forEach(ele=>{
-          let now = Date.parse(new Date());
-          let postTime = Date.parse(ele.created_at);
-          if(now-postTime>86400000*365){
-            ele.oneyearplus = true;
-          }else if(now-postTime>86400000*6){
-            ele.oneweekplus = true;
-          }else if(now-postTime>82800000){
-            ele.twentyfourplus = true;
-          }else if (Math.floor((now-postTime)/1000/60/60)>86400000/1000/60/60/24){
-            switch (Math.floor((now-postTime)/1000/60/60)) {
-              case 2:
-                ele.time = 2;
-                break;
-              case 3:
-                ele.time = 3;
-                break;
-              case 4:
-                ele.time = 4;
-                break;
-              case 5:
-                ele.time = 5;
-                break;
-              case 6:
-                ele.time = 6;
-                break;
-              case 7:
-                ele.time = 7;
-                break;
-              case 8:
-                ele.time = 8;
-                break;
-              case 9:
-                ele.time = 9;
-                break;
-              case 10:
-                ele.time = 10;
-                break;
-              case 11:
-                ele.time = 11;
-                break;
-              case 12:
-                ele.time = 12;
-                break;
-              case 13:
-                ele.time = 13;
-                break;
-              case 14:
-                ele.time = 14;
-                break;
-              case 15:
-                ele.time = 15;
-                break;
-              case 16:
-                ele.time = 16;
-                break;
-              case 17:
-                ele.time = 17;
-                break;
-              case 18:
-                ele.time = 18;
-                break;
-              case 19:
-                ele.time = 19;
-                break;
-              case 20:
-                ele.time = 20;
-                break;
-              case 21:
-                ele.time = 21;
-                break;
-              case 22:
-                ele.time = 22;
-                break;
-              case 23:
-                ele.time = 23;
-                break;
-            }
-            ele.twentyfourless = true;
-          }else if (Math.floor((now-postTime)/1000/60/60)===86400000/1000/60/60/24){
-            console.log(86400000/1000/60/60/24);
-            ele.time = 1;
-            ele.onehour = true;
-          }else if (Math.floor((now-postTime)/1000/60)===0){
-            ele.time = 'Just now';
-            ele.now = true;
-          }else{
-            ele.time = Math.floor((now-postTime)/1000/60);
-            ele.onehourless = true;
-          }
-        });
-      });
-    };
+    function whatTime(ele){
+      let now = Date.parse(new Date());
+      let postTime = Date.parse(ele.created_at);
+      if(now-postTime>86400000*365){
+        ele.oneyearplus = true;
+      }else if(now-postTime>86400000*6){
+        ele.oneweekplus = true;
+      }else if(now-postTime>82800000){
+        ele.twentyfourplus = true;
+      }else if (Math.floor((now-postTime)/1000/60/60)>86400000/1000/60/60/24){
+        ele.time = Math.floor((now-postTime)/1000/60/60);
+        // switch (Math.floor((now-postTime)/1000/60/60)) {
+        //   case 2:
+        //     ele.time = 2;
+        //     break;
+        //   case 3:
+        //     ele.time = 3;
+        //     break;
+        //   case 4:
+        //     ele.time = 4;
+        //     break;
+        //   case 5:
+        //     ele.time = 5;
+        //     break;
+        //   case 6:
+        //     ele.time = 6;
+        //     break;
+        //   case 7:
+        //     ele.time = 7;
+        //     break;
+        //   case 8:
+        //     ele.time = 8;
+        //     break;
+        //   case 9:
+        //     ele.time = 9;
+        //     break;
+        //   case 10:
+        //     ele.time = 10;
+        //     break;
+        //   case 11:
+        //     ele.time = 11;
+        //     break;
+        //   case 12:
+        //     ele.time = 12;
+        //     break;
+        //   case 13:
+        //     ele.time = 13;
+        //     break;
+        //   case 14:
+        //     ele.time = 14;
+        //     break;
+        //   case 15:
+        //     ele.time = 15;
+        //     break;
+        //   case 16:
+        //     ele.time = 16;
+        //     break;
+        //   case 17:
+        //     ele.time = 17;
+        //     break;
+        //   case 18:
+        //     ele.time = 18;
+        //     break;
+        //   case 19:
+        //     ele.time = 19;
+        //     break;
+        //   case 20:
+        //     ele.time = 20;
+        //     break;
+        //   case 21:
+        //     ele.time = 21;
+        //     break;
+        //   case 22:
+        //     ele.time = 22;
+        //     break;
+        //   case 23:
+        //     ele.time = 23;
+        //     break;
+        // }
+        ele.twentyfourless = true;
+      }else if (Math.floor((now-postTime)/1000/60/60)===1){
+        ele.time = 1;
+        ele.onehour = true;
+      }else if (Math.floor((now-postTime)/1000/60)===0){
+        ele.time = 'Just now';
+        ele.now = true;
+      }else{
+        if(Math.floor((now-postTime)/1000/60)===1){
+          ele.time = Math.floor((now-postTime)/1000/60);
+          ele.oneminute = true;
+        }else{
+          ele.time = Math.floor((now-postTime)/1000/60);
+          ele.onehourless = true;
+        }
+      }
+    }
 
   }
 }());

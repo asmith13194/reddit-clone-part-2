@@ -1,19 +1,22 @@
 (function(){
-  angular.module('app')
+  angular
+  .module('app')
   .component('post',{
     templateUrl:'/components/posts/post.template.html',
     controller: controller
   });
-
   controller.$inject = ['$http'];
   function controller($http){
     const vm = this;
 
     vm.$onInit = function(){
-      $http.get('/api/posts').then(function (response) {
-        vm.sort = '-vote_count';
+      vm.sort = '-vote_count';
+      $http
+      .get('/api/posts')
+      .then(function (response) {
         vm.master = (response.data);
-        vm.master.forEach(ele=>{
+        vm.master
+        .forEach(ele=>{
           whatTime(ele);
         });
       });
@@ -45,11 +48,14 @@
       post.vote_count = 0;
       post.showCommentsToggle = false;
       post.editPostToggle = false;
-      $http.post('/api/posts',post).then(response=>{
+      $http
+      .post('/api/posts',post)
+      .then(response=>{
         response.data.comments=[];
         response.data.time = 'Just now';
         response.data.now = true;
-        vm.master.push(response.data);
+        vm.master
+        .push(response.data);
       });
     };
 
@@ -58,7 +64,9 @@
       post.vote_count = 0;
       post.showCommentsToggle = false;
       posty.editPostToggle = false;
-      $http.patch('/api/posts/'+posty.id,post).then(response=>{
+      $http
+      .patch('/api/posts/'+posty.id,post)
+      .then(response=>{
         vm.master[vm.master.indexOf(posty)].title = response.data.title;
         vm.master[vm.master.indexOf(posty)].author = response.data.author;
         vm.master[vm.master.indexOf(posty)].body = response.data.body;
@@ -67,7 +75,9 @@
     };
 
     vm.deletePost = function(post){
-      $http.delete('/api/posts/'+post.id).then(()=>{
+      $http
+      .delete('/api/posts/'+post.id)
+      .then(()=>{
         let postbox = vm.master.indexOf(post);
         vm.master.splice(postbox,1);
       });
@@ -87,18 +97,25 @@
 
     vm.createComment = function($event,post,comment){
       let postbox = vm.master.indexOf(post);
-      $http.post('/api/posts/'+post.id+'/comments',{content:comment}).then(response=>{
+      $http
+      .post('/api/posts/'+post.id+'/comments',{content:comment})
+      .then(response=>{
         vm.master[postbox].comments.push(response.data);
       });
     };
 
     vm.updateComment = function(post,comment){
-      $http.patch('/api/posts/'+post.id+'/comments/'+comment.id,{content:comment.content}).then(response=>{
+      let data = {content:comment.content};
+      $http
+      .patch('/api/posts/'+post.id+'/comments/'+comment.id,data)
+      .then(response=>{
       });
     };
 
     vm.deleteComment = function(post,comment){
-      $http.delete('/api/posts/'+post.id+'/comments/'+comment.id).then(()=>{
+      $http
+      .delete('/api/posts/'+post.id+'/comments/'+comment.id)
+      .then(()=>{
         let postbox = vm.master.indexOf(post);
         let commentbox = vm.master[postbox].comments.indexOf(comment);
         vm.master[postbox].comments.splice(commentbox,commentbox+1);
@@ -106,13 +123,17 @@
     };
 
     vm.voteUp = function(post){
-      $http.post('api/posts/'+post.id+'/votes').then(response=>{
+      $http
+      .post('api/posts/'+post.id+'/votes')
+      .then(response=>{
         post.vote_count = response.data.vote_count;
       });
     };
 
     vm.voteDown = function(post){
-      $http.delete('api/posts/'+post.id+'/votes').then(response=>{
+      $http
+      .delete('api/posts/'+post.id+'/votes')
+      .then(response=>{
         post.vote_count = response.data.vote_count;
       });
     };
@@ -140,7 +161,7 @@
         ele.oneweekplus = true;
       }else if(now-postTime>82800000){
         ele.twentyfourplus = true;
-      }else if (Math.floor((now-postTime)/1000/60/60)>86400000/1000/60/60/24){
+      }else if (Math.floor((now-postTime)/1000/60/60)>1){
         ele.time = Math.floor((now-postTime)/1000/60/60);
         ele.twentyfourless = true;
       }else if (Math.floor((now-postTime)/1000/60/60)===1){

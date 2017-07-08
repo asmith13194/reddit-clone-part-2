@@ -25,12 +25,14 @@
 
     <ul class="nav nav-pills">
       <li role="presentation" class="active">
-        <input type="search" ng-model="$ctrl.filter" class="form-control input-sm search-form" placeholder="Filter">
+        <input type="search" ng-model="$ctrl.filter" class="form-control input-sm search-form" placeholder="Filter Posts...">
       </li>
       <li class="dropdown form-inline" ng-init="sort='vote_count'; sortName='Votes'">
         <a class="dropdown-toggle" data-toggle="dropdown" role="button">Sort By {{$ctrl.checkSort()}}<span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a ng-click="$ctrl.sort='-vote_count'">Votes</a></li>
+          <li><a ng-click="$ctrl.sort='-vote_count'">Most Votes</a></li>
+          <li><a ng-click="$ctrl.sort='-comments.length'">Most Comments</a></li>
+          <li><a ng-click="$ctrl.sort='-created_at'">Most Recent</a></li>
           <li><a ng-click="$ctrl.sort='title'">Title</a></li>
         </ul>
       </li>
@@ -86,7 +88,18 @@
             </p>
 
             <div>
-              {{posty.created_at | date:short}} |
+              <span class="time-stamps" ng-if="posty.twentyfourless">
+                {{posty.created_at | date: "'Today at' h:mm a"}} |
+              </span>
+              <span class="time-stamps" ng-if="posty.twentyfourplus">
+                {{posty.created_at | date: "EEEE, MMM d 'at' h:mm a"}} |
+              </span>
+              <span class="time-stamps" ng-if="posty.oneweekplus">
+                {{posty.created_at | date: "MMM d 'at' h:mm a"}} |
+              </span>
+              <span class="time-stamps" ng-if="posty.oneyearplus">
+                {{posty.created_at | date: "MMM d, y 'at' h:mm a"}} |
+              </span>
               <i class="glyphicon glyphicon-comment"></i>
               <a ng-click="$ctrl.showComments(posty)">
               {{posty.comments.length}} Comments

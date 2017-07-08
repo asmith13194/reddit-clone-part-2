@@ -39,7 +39,7 @@
       post.editPostToggle = false;
       $http.post('/api/posts',post).then(response=>{
         response.data.comments=[];
-        vm.master.unshift(response.data);
+        vm.master.push(response.data);
       });
     };
 
@@ -112,12 +112,30 @@
         return 'Votes';
       }else if(vm.sort==='title'){
         return 'Title';
+      }else if(vm.sort==='-comments.length'){
+        return 'Comments';
+      }else if(vm.sort==='-created_at'){
+        return 'Recent';
       }
     };
 
     vm.$onInit = function(){
       $http.get('/api/posts').then(function (response) {
         vm.master = (response.data);
+        vm.master.forEach(ele=>{
+          let now = Date.parse(new Date());
+          let postTime = Date.parse(ele.created_at);
+          console.log(postTime-now);
+          if(now-postTime>86400000*365){
+            ele.oneyearplus = true;
+          }else if(now-postTime>86400000*6){
+            ele.oneweekplus = true;
+          }else if(now-postTime>86400000){
+            ele.twentyfourplus = true;
+          }else{
+            ele.twentyfourless = true;
+          }
+        });
       });
     };
 

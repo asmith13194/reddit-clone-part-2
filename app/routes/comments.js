@@ -1,13 +1,13 @@
-const express = require('express')
-const router = express.Router()
-const knex = require('../db')
+const express = require('express');
+const router = express.Router();
+const knex = require('../db');
 
 router.get('/:post_id/comments', (req, res, next) => {
   knex('comments')
     .where({post_id: req.params.post_id})
     .then(comments => res.json(comments))
-    .catch(err => next(err))
-})
+    .catch(err => next(err));
+});
 
 router.post('/:post_id/comments', validate, (req, res, next) => {
   knex('comments')
@@ -15,8 +15,8 @@ router.post('/:post_id/comments', validate, (req, res, next) => {
     .where({post_id: req.params.post_id})
     .returning('*')
     .then(comments => res.json(comments[0]))
-    .catch(err => next(err))
-})
+    .catch(err => next(err));
+});
 
 router.patch('/:post_id/comments/:id', validate, (req, res, next) => {
   knex('comments')
@@ -24,26 +24,26 @@ router.patch('/:post_id/comments/:id', validate, (req, res, next) => {
     .where({post_id: req.params.post_id, id: req.params.id})
     .returning('*')
     .then(comments => res.json(comments[0]))
-    .catch(err => next(err))
-})
+    .catch(err => next(err));
+});
 
 router.delete('/:post_id/comments/:id', (req, res, next) => {
   knex('comments')
     .del()
     .where({post_id: req.params.post_id, id: req.params.id})
     .then(() => res.end())
-    .catch(err => next(err))
-})
+    .catch(err => next(err));
+});
 
 function validate(req, res, next) {
   const errors = [];
   ['content'].forEach(field => {
     if (!req.body[field] || req.body[field].trim() === '') {
-      errors.push({field, messages: ["cannot be blank"]})
+      errors.push({field, messages: ["cannot be blank"]});
     }
-  })
-  if (errors.length) return res.status(422).json({errors})
-  next()
+  });
+  if (errors.length) return res.status(422).json({errors});
+  next();
 }
 
-module.exports = router
+module.exports = router;

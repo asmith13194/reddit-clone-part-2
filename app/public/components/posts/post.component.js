@@ -126,6 +126,8 @@
         return 'Comments';
       }else if(vm.sort==='-created_at'){
         return 'Recent';
+      }else if(vm.sort==='created_at'){
+        return 'Oldest'
       }
     };
 
@@ -140,74 +142,6 @@
         ele.twentyfourplus = true;
       }else if (Math.floor((now-postTime)/1000/60/60)>86400000/1000/60/60/24){
         ele.time = Math.floor((now-postTime)/1000/60/60);
-        // switch (Math.floor((now-postTime)/1000/60/60)) {
-        //   case 2:
-        //     ele.time = 2;
-        //     break;
-        //   case 3:
-        //     ele.time = 3;
-        //     break;
-        //   case 4:
-        //     ele.time = 4;
-        //     break;
-        //   case 5:
-        //     ele.time = 5;
-        //     break;
-        //   case 6:
-        //     ele.time = 6;
-        //     break;
-        //   case 7:
-        //     ele.time = 7;
-        //     break;
-        //   case 8:
-        //     ele.time = 8;
-        //     break;
-        //   case 9:
-        //     ele.time = 9;
-        //     break;
-        //   case 10:
-        //     ele.time = 10;
-        //     break;
-        //   case 11:
-        //     ele.time = 11;
-        //     break;
-        //   case 12:
-        //     ele.time = 12;
-        //     break;
-        //   case 13:
-        //     ele.time = 13;
-        //     break;
-        //   case 14:
-        //     ele.time = 14;
-        //     break;
-        //   case 15:
-        //     ele.time = 15;
-        //     break;
-        //   case 16:
-        //     ele.time = 16;
-        //     break;
-        //   case 17:
-        //     ele.time = 17;
-        //     break;
-        //   case 18:
-        //     ele.time = 18;
-        //     break;
-        //   case 19:
-        //     ele.time = 19;
-        //     break;
-        //   case 20:
-        //     ele.time = 20;
-        //     break;
-        //   case 21:
-        //     ele.time = 21;
-        //     break;
-        //   case 22:
-        //     ele.time = 22;
-        //     break;
-        //   case 23:
-        //     ele.time = 23;
-        //     break;
-        // }
         ele.twentyfourless = true;
       }else if (Math.floor((now-postTime)/1000/60/60)===1){
         ele.time = 1;

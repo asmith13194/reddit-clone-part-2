@@ -88,8 +88,17 @@
             </p>
 
             <div>
+              <span class="time-stamps" ng-if="posty.now">
+                {{posty.time}} |
+              </span>
+              <span class="time-stamps" ng-if="posty.onehourless">
+                {{posty.time}} minutes ago |
+              </span>
+              <span class="time-stamps" ng-if="posty.onehour">
+                {{posty.time}} hour ago |
+              </span>
               <span class="time-stamps" ng-if="posty.twentyfourless">
-                {{posty.created_at | date: "'Today at' h:mm a"}} |
+                {{posty.time}} hours ago |
               </span>
               <span class="time-stamps" ng-if="posty.twentyfourplus">
                 {{posty.created_at | date: "EEEE, MMM d 'at' h:mm a"}} |

@@ -127,7 +127,7 @@
       }else if(vm.sort==='-created_at'){
         return 'Recent';
       }else if(vm.sort==='created_at'){
-        return 'Oldest'
+        return 'Oldest';
       }
     };
 

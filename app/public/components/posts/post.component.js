@@ -59,9 +59,7 @@
     vm.deletePost = function(post){
       $http.delete('/api/posts/'+post.id).then(()=>{
         let postbox = vm.master.indexOf(post);
-        console.log(vm.master);
         vm.master.splice(postbox,1);
-        console.log(vm.master);
       });
     };
 

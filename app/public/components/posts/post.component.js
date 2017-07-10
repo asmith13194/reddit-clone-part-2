@@ -88,75 +88,49 @@
     };
 
     vm.newPostForm = function() {
-      if (vm.newPostToggle === true) {
-        vm.newPostToggle = false;
-      } else {
-        vm.newPostToggle = true;
-      }
+      return postService
+        .postFormToggle(vm);
     };
 
     vm.editPostForm = function(posty) {
-      if (posty.editPostToggle === true) {
-        posty.editPostToggle = false;
-        return;
-      } else if (posty.showCommentsToggle === true) {
-        posty.showCommentsToggle = false;
-        posty.editPostToggle = true;
-        return;
-      }
-      posty.editPostToggle = true;
+      return postService
+        .editPostFormToggle(posty);
     };
 
     vm.showComments = function(posty) {
-      if (posty.showCommentsToggle === true) {
-        posty.showCommentsToggle = false;
-        return;
-      } else if (posty.editPostToggle === true) {
-        posty.showCommentsToggle = true;
-        posty.editPostToggle = false;
-        return;
-      }
-      posty.showCommentsToggle = true;
+      return commentService
+      .showComments(posty);
     };
 
-    vm.checkSort = function() {
-      if (vm.sort === '-vote_count') {
-        return 'Votes';
-      } else if (vm.sort === 'title') {
-        return 'Title';
-      } else if (vm.sort === '-comments.length') {
-        return 'Comments';
-      } else if (vm.sort === '-created_at') {
-        return 'Recent';
-      } else if (vm.sort === 'created_at') {
-        return 'Oldest';
-      }
+    vm.sortType = function() {
+      return postService
+      .checkSort(vm);
     };
 
     function whatTime(ele) {
       let now = Date.parse(new Date());
       let postTime = Date.parse(ele.created_at);
-      if (now - postTime > 86400000 * 365) {
+      if (now - postTime > 30879000000) {
         ele.oneyearplus = true;
       } else if (now - postTime > 86400000 * 6) {
         ele.oneweekplus = true;
       } else if (now - postTime > 82800000) {
         ele.twentyfourplus = true;
-      } else if (Math.floor((now - postTime) / 1000 / 60 / 60) > 1) {
-        ele.time = Math.floor((now - postTime) / 1000 / 60 / 60);
+      } else if (Math.floor((now - postTime) / 3600000) > 1) {
+        ele.time = Math.floor((now - postTime) / 3600000);
         ele.twentyfourless = true;
-      } else if (Math.floor((now - postTime) / 1000 / 60 / 60) === 1) {
+      } else if (Math.floor((now - postTime) / 3600000) === 1) {
         ele.time = 1;
         ele.onehour = true;
-      } else if (Math.floor((now - postTime) / 1000 / 60) === 0) {
+      } else if (Math.floor((now - postTime) / 60000) === 0) {
         ele.time = 'Just now';
         ele.now = true;
       } else {
-        if (Math.floor((now - postTime) / 1000 / 60) === 1) {
-          ele.time = Math.floor((now - postTime) / 1000 / 60);
+        if (Math.floor((now - postTime) / 60000) === 1) {
+          ele.time = Math.floor((now - postTime) / 60000);
           ele.oneminute = true;
         } else {
-          ele.time = Math.floor((now - postTime) / 1000 / 60);
+          ele.time = Math.floor((now - postTime) / 60000);
           ele.onehourless = true;
         }
       }
